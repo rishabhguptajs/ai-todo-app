@@ -1,0 +1,1 @@
+# The Frontend for this project, built using NextJS
