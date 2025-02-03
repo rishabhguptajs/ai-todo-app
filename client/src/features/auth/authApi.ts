@@ -11,7 +11,7 @@ export const authApi = createApi({
         body: credentials,
       }),
     }),
-    register: builder.mutation<{ token: string; user: any }, { email: string; password: string }>({
+    register: builder.mutation<{ token: string; user: any }, { email: string; password: string; confirmPassword: string }>({
       query: (credentials) => ({
         url: "/auth/register",
         method: "POST",
