@@ -17,3 +17,5 @@ Available Tools:
 - deleteTodoById(id: number): Deletes a todo from the database by id.
 - searchTodo(search: string): Searches for a todo in the database by search string using ilike in db.
 `
+
+export { SYSTEM_PROMPT };
