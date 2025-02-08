@@ -8,9 +8,13 @@ async function getAllTodos() {
 }
 
 async function createTodo(todo) {
-    await db.insert(todosTable).values({
+    const [result] = await db.insert(todosTable).values({
         todo,
+    }).returning({
+        id: todosTable.id,
     });
+
+    return result.id;
 }
 
 async function searchTodo(search) {
@@ -26,9 +30,17 @@ async function deleteTodoById(id){
     await db.delete(todosTable).where(eq(todosTable.id, id));
 }
 
+const tools = {
+    getAllTodos: getAllTodos,
+    createTodo: createTodo,
+    searchTodo: searchTodo,
+    deleteTodoById: deleteTodoById
+};
+
 export {
     getAllTodos,
     createTodo,
     searchTodo,
-    deleteTodoById
+    deleteTodoById,
+    tools
 };

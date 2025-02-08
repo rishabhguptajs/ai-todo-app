@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { drizzle } from 'drizzle-orm/singlestore/driver';
+import { drizzle } from 'drizzle-orm/node-postgres'
 
 dotenv.config();
 
