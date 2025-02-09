@@ -26,7 +26,7 @@ async function searchTodo(search) {
     return todo;
 }
 
-async function deleteTodoById(id){
+async function deleteTodoById(id) {
     await db.delete(todosTable).where(eq(todosTable.id, id));
 }
 

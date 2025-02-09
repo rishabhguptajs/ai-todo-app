@@ -28,10 +28,10 @@ while (true) {
             }
         });
 
-        console.log(response.data)
-
         const result = response.data.choices[0].message.content;
         messages.push({ role: 'assistant', content: result });
+
+        console.log(result)
 
         const action = JSON.parse(result);
 
