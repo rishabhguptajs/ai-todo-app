@@ -1,7 +1,4 @@
 import type { Metadata } from "next"
-import { Provider } from "react-redux"
-import { store, persistor } from "../store/store"
-import { PersistGate } from "redux-persist/integration/react"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 
@@ -27,15 +24,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
           <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           >
             {children}
           </body>
-        </PersistGate>
-      </Provider>
     </html>
   )
 }
