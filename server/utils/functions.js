@@ -21,9 +21,27 @@ async function searchTodo(search) {
     const todo = await db
         .select()
         .from(todosTable)
-        .where(ilike(todosTable.todo, search));
+        .where(ilike(todosTable.todo, `%${search}%`));
 
     return todo;
+}
+
+async function updateTodo(metadata) {
+    const { id, newTodo } = metadata;
+
+    if (!newTodo || typeof newTodo !== 'string' || newTodo.trim() === '') {
+        console.log(newTodo);
+        throw new Error('Invalid newTodo value. It must be a non-empty string.');
+    }
+
+    const result = await db
+        .update(todosTable)
+        .set({
+            todo: newTodo
+        })
+        .where(eq(todosTable.id, id));
+
+    return result;
 }
 
 async function deleteTodoById(id) {
@@ -34,6 +52,7 @@ const tools = {
     getAllTodos: getAllTodos,
     createTodo: createTodo,
     searchTodo: searchTodo,
+    updateTodo: updateTodo,
     deleteTodoById: deleteTodoById
 };
 
