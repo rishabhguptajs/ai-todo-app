@@ -6,26 +6,45 @@ import { useRouter } from 'next/navigation';
 const Chat = () => {
   const router = useRouter();
   const [messages, setMessages] = useState([
-    { text: "Hi, can you help me add a new task?", sender: "user" },
-    { text: "Your task has been added successfully!", sender: "llm" }
+    { text: "I am a chatbot for task management, how can I help you?", sender: "llm" }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (inputValue.trim() && !isSending) {
       setMessages([...messages, { text: inputValue, sender: "user" }]);
       setInputValue('');
       setIsSending(true);
 
-      setTimeout(() => {
+      try {
+        const response = await fetch('http://localhost:8080/llm/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message: inputValue }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
         setMessages(prevMessages => [
           ...prevMessages,
-          { text: "This is a simulated response from LLM.", sender: "llm" }
+          { text: data.data, sender: "llm" }
         ]);
+      } catch (error) {
+        console.error('Error sending message:', error);
+        setMessages(prevMessages => [
+          ...prevMessages,
+          { text: "Error: Unable to get response.", sender: "llm" }
+        ]);
+      } finally {
         setIsSending(false);
-      }, 1000);
+      }
     }
   };
 
