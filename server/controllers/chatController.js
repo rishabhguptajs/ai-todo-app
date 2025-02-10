@@ -4,7 +4,6 @@ const chatController = async(req, res) => {
     try {
         const { message } = req.body;
 
-        // llm call here with the result
         const result = await talkToLLM(message);
 
         if(result) {
