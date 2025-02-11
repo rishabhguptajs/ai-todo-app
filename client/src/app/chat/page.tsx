@@ -14,7 +14,12 @@ const Chat = () => {
 
   const handleSendMessage = async () => {
     if (inputValue.trim() && !isSending) {
-      setMessages([...messages, { text: inputValue, sender: "user" }]);
+      setMessages(prevMessages => [
+        ...prevMessages,
+        { text: inputValue, sender: "user" }
+      ]);
+      
+      const currentInput = inputValue;
       setInputValue('');
       setIsSending(true);
 
@@ -24,7 +29,7 @@ const Chat = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ message: inputValue }),
+          body: JSON.stringify({ message: currentInput }),
         });
 
         if (!response.ok) {
@@ -32,15 +37,23 @@ const Chat = () => {
         }
 
         const data = await response.json();
-        setMessages(prevMessages => [
-          ...prevMessages,
-          { text: data.data, sender: "llm" }
-        ]);
+
+        if (data && data.data) {
+          setMessages(prevMessages => [
+            ...prevMessages,
+            { text: data.data, sender: "llm" }
+          ]);
+        } else {
+          setMessages(prevMessages => [
+            ...prevMessages,
+            { text: "Oops! Something went wrong. Please try again later.", sender: "llm" }
+          ]);
+        }
       } catch (error) {
         console.error('Error sending message:', error);
         setMessages(prevMessages => [
           ...prevMessages,
-          { text: "Error: Unable to get response.", sender: "llm" }
+          { text: "Oops! Something went wrong. Please try again later.", sender: "llm" }
         ]);
       } finally {
         setIsSending(false);
@@ -63,20 +76,8 @@ const Chat = () => {
       <div className="h-full flex flex-col">
         {/* Header */}
         <div className="bg-gray-100 px-6 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-semibold text-gray-800">Chat Interface</h1>
+          <h1 className="text-2xl font-semibold text-gray-800">AI Todo Agent</h1>
           <div className="space-x-4">
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-            >
-              Dashboard
-            </button>
-            <button
-              onClick={() => router.push('/')}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-            >
-              Logout
-            </button>
           </div>
         </div>
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
@@ -108,7 +109,6 @@ const Chat = () => {
             onKeyPress={handleKeyPress}
             placeholder="Type your message..."
             className="flex-1 border rounded-l-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            disabled={isSending}
           />
           <button
             onClick={handleSendMessage}
