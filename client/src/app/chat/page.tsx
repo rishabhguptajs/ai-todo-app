@@ -24,7 +24,7 @@ const Chat = () => {
       setIsSending(true);
 
       try {
-        const response = await fetch('http://localhost:8080/llm/chat', {
+        const response = await fetch('https://ai-todo-app.onrender.com/llm/chat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -72,52 +72,48 @@ const Chat = () => {
   }, [messages]);
 
   return (
-    <div className="h-screen bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200">
-      <div className="h-full flex flex-col">
+    <div className="h-screen bg-gradient-to-r from-blue-400 to-purple-600 flex flex-col">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {/* Header */}
-        <div className="bg-gray-100 px-6 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-semibold text-gray-800">AI Todo Agent</h1>
-          <div className="space-x-4">
+        <div className="bg-white shadow-md rounded-lg p-4 flex justify-between items-center mb-4">
+          <h1 className="text-3xl font-bold text-gray-800">AI Todo Agent</h1>
+        </div>
+        {messages.map((message, index) => (
+          <div key={index} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
+            {message.sender === "user" ? (
+              <div className="bg-blue-600 text-white p-4 rounded-lg shadow-lg max-w-md">
+                <p>{message.text}</p>
+              </div>
+            ) : (
+              <div className="flex items-start">
+                <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                  <span className="text-lg font-bold text-white">AI</span>
+                </div>
+                <div className="bg-white p-4 rounded-lg shadow-lg max-w-md">
+                  <p className="text-gray-700">{message.text}</p>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          {messages.map((message, index) => (
-            <div key={index} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
-              {message.sender === "user" ? (
-                <div className="bg-blue-500 text-white p-4 rounded-xl shadow-md max-w-md">
-                  <p>{message.text}</p>
-                </div>
-              ) : (
-                <div className="flex items-start">
-                  <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center mr-3">
-                    <span className="text-lg font-bold text-white">AI</span>
-                  </div>
-                  <div className="bg-white p-4 rounded-xl shadow-md max-w-md">
-                    <p className="text-gray-700">{message.text}</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
-        <div className="bg-gray-100 px-6 py-4 flex items-center">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Type your message..."
-            className="flex-1 border rounded-l-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-          />
-          <button
-            onClick={handleSendMessage}
-            className="px-6 py-2 bg-blue-500 text-white rounded-r-full hover:bg-blue-600 transition"
-            disabled={isSending}
-          >
-            Send
-          </button>
-        </div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
+      <div className="bg-white shadow-md rounded-lg p-4 flex items-center">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder="Type your message..."
+          className="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+        />
+        <button
+          onClick={handleSendMessage}
+          className="px-6 py-2 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 transition"
+          disabled={isSending}
+        >
+          Send
+        </button>
       </div>
     </div>
   );
