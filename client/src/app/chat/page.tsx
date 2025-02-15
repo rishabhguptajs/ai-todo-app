@@ -72,16 +72,16 @@ const Chat = () => {
   }, [messages]);
 
   return (
-    <div className="h-screen bg-gradient-to-r from-blue-400 to-purple-600 flex flex-col">
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+    <div className="h-screen bg-gradient-to-r from-blue-500 to-purple-700 flex flex-col">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
         {/* Header */}
-        <div className="bg-white shadow-md rounded-lg p-4 flex justify-between items-center mb-4">
-          <h1 className="text-3xl font-bold text-gray-800">AI Todo Agent</h1>
+        <div className="bg-white shadow-lg rounded-lg p-4 flex justify-between items-center mb-4">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">AI Todo Agent</h1>
         </div>
         {messages.map((message, index) => (
           <div key={index} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
             {message.sender === "user" ? (
-              <div className="bg-blue-600 text-white p-4 rounded-lg shadow-lg max-w-md">
+              <div className="bg-blue-600 text-white p-3 rounded-lg shadow-md max-w-xs md:max-w-md">
                 <p>{message.text}</p>
               </div>
             ) : (
@@ -89,7 +89,7 @@ const Chat = () => {
                 <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center mr-3">
                   <span className="text-lg font-bold text-white">AI</span>
                 </div>
-                <div className="bg-white p-4 rounded-lg shadow-lg max-w-md">
+                <div className="bg-white p-3 rounded-lg shadow-md max-w-xs md:max-w-md">
                   <p className="text-gray-700">{message.text}</p>
                 </div>
               </div>
@@ -98,7 +98,7 @@ const Chat = () => {
         ))}
         <div ref={messagesEndRef} />
       </div>
-      <div className="bg-white shadow-md rounded-lg p-4 flex items-center">
+      <div className="bg-white shadow-lg rounded-lg p-4 flex items-center">
         <input
           type="text"
           value={inputValue}
@@ -109,7 +109,7 @@ const Chat = () => {
         />
         <button
           onClick={handleSendMessage}
-          className="px-6 py-2 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 transition"
+          className="px-4 py-2 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 transition"
           disabled={isSending}
         >
           Send
